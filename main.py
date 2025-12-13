@@ -9,6 +9,16 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,      # İzin verilen siteler
+    allow_credentials=True,     # Çerezlere (Cookie) izin ver
+    allow_methods=["*"],        # Tüm metodlara izin ver (GET, POST, DELETE...)
+    allow_headers=["*"],        # Tüm başlıklara (Header) izin ver
+)
+
+
 # Routerları ana uygulamaya dahil et (Include)
 app.include_router(post.router)
 app.include_router(user.router)
