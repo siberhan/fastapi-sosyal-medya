@@ -27,4 +27,4 @@ app.include_router(vote.router)
 
 @app.get("/")
 def root():
-    return {"message": "Hello World"}
+    return {"message": "Selamun Aleykum, burasi artik otomatik guncelleniyor! 🚀"}
