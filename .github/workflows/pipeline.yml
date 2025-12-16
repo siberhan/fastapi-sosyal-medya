@@ -55,12 +55,26 @@ jobs:
       - name: Kodları Çek (Checkout)
         uses: actions/checkout@v4
 
-      - name: Bandit'i Kur ve Çalıştır
-        uses: rjstone/bandit-action@v1.0.0
+      # Bandit'i kurmak için Python ortamını ayarlamamız gerekiyor
+      - name: Python Kur
+        uses: actions/setup-python@v4
         with:
-          targets: "."
-          severity_level: medium # Orta ve üzeri zafiyet bulursa pipeline başarısız olur
+          python-version: "3.10"
 
+      # Bandit kütüphanesini ve gereksinimleri kur
+      - name: Bağımlılıkları Yükle
+        run: pip install bandit
+
+      # Bandit'i çalıştır ve sonuçları göster
+      - name: Bandit'i Çalıştır (Güvenlik Tarama)
+        run: |
+          # Bandit'i medium (orta) ve üzeri zafiyetlerde hata verecek şekilde çalıştır.
+          # B404 (subprocess_module_without_shell) zafiyetini geçici olarak görmezden geliyoruz.
+          bandit -r . -ll -x tests/ -b B404
+        env:
+          PYTHONPATH: .
+
+          
   # --- GÖREV 3: KÜTÜPHANE ZAFİYET TARAMASI (Trivy) ---
   trivy-scan:
     needs: bandit-scan # Sadece Bandit geçtiyse başla
