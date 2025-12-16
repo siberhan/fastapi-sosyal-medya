@@ -35,7 +35,7 @@ def test_login_user(client):
     id = payload.get("user_id")
     
     assert id is not None
-    assert login_res.token_type == "bearer"
+    assert login_res.token_type == "bearer" # nosec B105
     assert res.status_code == 200
 
 # 3. HATALI GİRİŞ TESTLERİ (PARAMETRİZE)
