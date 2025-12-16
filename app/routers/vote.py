@@ -1,6 +1,10 @@
 from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
-import schemas, database, models, oauth2
+
+# --- DÜZELTİLEN KISIM (Relative Imports) ---
+# app.schemas, models vb. yerine ..schemas, ..models kullanıyoruz
+from .. import schemas, database, models, oauth2
+# ----------------------------------------------
 
 router = APIRouter(
     prefix="/vote",
