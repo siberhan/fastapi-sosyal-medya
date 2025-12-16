@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  # 1. BİZİM UYGULAMAMIZ
+  api:
+    build: .  # Mevcut klasördeki Dockerfile'ı kullan
+    ports:
+      - "9000:8000" # Dışarıdan 8000, içeriden 8000
+    depends_on:
+      - postgres # Önce veritabanı başlasın
+    # Docker içinde 'localhost' çalışmaz, servis ismini (postgres) kullanırız
+    env_file:
+      - .env
+    environment:
+      - DATABASE_HOSTNAME=postgres # <--- KRİTİK NOKTA!
+      - DATABASE_PORT=5432
+      - DATABASE_PASSWORD=3012
+      - DATABASE_NAME=fastapi
+      - DATABASE_USERNAME=postgres
+
+  # 2. VERİTABANI SERVİSİ (POSTGRESQL)
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_PASSWORD=3012
+      - POSTGRES_DB=fastapi
+    volumes:
+      - postgres-db:/var/lib/postgresql/data # Veriler kaybolmasın diye volume
+
+volumes:
+  postgres-db:
