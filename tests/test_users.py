@@ -5,8 +5,8 @@ import pytest
 
 # 1. KULLANICI OLUŞTURMA TESTİ
 def test_create_user(client):
-    email = "testdeneme@gmail.com"
-    password = "password123"
+    email = "testdeneme@gmail.com" # nosec B105
+    password = "password123" # nosec B105
     
     res = client.post("/users/", json={"email": email, "password": password})
     
@@ -20,8 +20,8 @@ def test_create_user(client):
 # 2. GİRİŞ YAPMA (LOGIN) TESTİ
 def test_login_user(client):
     # Önce bir kullanıcı oluşturuyoruz (client fixture'ı temiz DB verdiği için)
-    email = "giris@gmail.com"
-    password = "123"
+    email = "giris@gmail.com" # nosec B105
+    password = "123" # nosec B105
     client.post("/users/", json={"email": email, "password": password})
     
     # Şimdi giriş yapmayı deniyoruz (Form Data olarak gider)

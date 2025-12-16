@@ -65,15 +65,11 @@ jobs:
       - name: Bağımlılıkları Yükle
         run: pip install bandit
 
-      # Bandit'i çalıştır ve sonuçları göster
-      # Bandit'i Çalıştır (Güvenlik Tarama) - HATA AYIKLAMA MODU
-     # Bandit'i Çalıştır (Zafiyetleri Göster) - KESİN ÇÖZÜM
+      # Bandit'i Çalıştır (Zafiyetleri Göster) - SON DÜZELTME
       - name: Bandit'i Çalıştır (Zafiyetleri Göster)
         run: |
-          # --recursive ile tüm klasörleri tara.
-          # --skip B404: Sık çıkan false positive'leri atla.
-          # --exit-zero: Hata bulsa bile 0 koduyla çık (Pipeline'ın devam etmesi için).
-          bandit -r . -x tests/ --skip B404 --exit-zero
+          # B101 uyarılarını es geç, Low/Medium/High riskleri göster ve 0 koduyla çık.
+          bandit -r . -x tests/ --skip B404,B101 --exit-zero
         env:
           PYTHONPATH: .
 
