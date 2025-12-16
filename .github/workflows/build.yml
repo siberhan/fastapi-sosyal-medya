@@ -1,35 +1,30 @@
 name: Build and Test
 
-# Ne zaman çalışsın? (Push veya Pull Request gelince)
 on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     
-    # Test ortamı için Environment Variables
-    # (GitHub sunucusunda .env dosyası olmadığı için değerleri buraya elle giriyoruz)
+    # 1. SENİN ENV DOSYANDAKİ DEĞERLERİ BURAYA GİRDİK
     env:
       DATABASE_HOSTNAME: localhost
       DATABASE_PORT: 5432
-      DATABASE_PASSWORD: 3012
-      DATABASE_NAME: fastapi
+      DATABASE_PASSWORD: 3012  # <--- Senin şifren
+      DATABASE_NAME: fastapi   # <--- Uygulama açılırken bu ismi arıyor
       DATABASE_USERNAME: postgres
-      SECRET_KEY: "ben_kediler_kopekleri_bir_de_tavuklari_cok_severim" 
+      SECRET_KEY: "ben_kediler_kopekleri_bir_de_tavuklari_cok_severim" # <--- Senin key
       ALGORITHM: "HS256"
       ACCESS_TOKEN_EXPIRE_MINUTES: 30
 
-
-    # Test için geçici PostgreSQL Servisi (Docker Container)
     services:
       postgres:
         image: postgres
         env:
-          POSTGRES_PASSWORD: password123
-          POSTGRES_DB: fastapi_test 
+          POSTGRES_PASSWORD: 3012 # <--- Veritabanı şifresi de 3012 yaptık ki uyuşsun
+          POSTGRES_DB: fastapi    # <--- Varsayılan olarak 'fastapi' DB'sini oluştur dedik
         ports:
           - 5432:5432
-        # Postgres'in tamamen açılmasını bekleme ayarı (Health Check)
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -37,23 +32,24 @@ jobs:
           --health-retries 5
 
     steps:
-      # 1. Kodları GitHub'dan çek
       - name: Pull git repo
         uses: actions/checkout@v2
 
-      # 2. Python 3.10 kur
       - name: Install python
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
 
-      # 3. Kütüphaneleri yükle
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # 4. Testleri çalıştır (Pytest)
+      # 2. TEST VERİTABANI OLUŞTURMA (ŞİFREYİ 3012 YAPTIK)
+      - name: Create test database
+        run: |
+          python -c "import psycopg2; conn = psycopg2.connect(user='postgres', password='3012', host='localhost', port='5432'); conn.set_isolation_level(0); cur = conn.cursor(); cur.execute('CREATE DATABASE fastapi_test'); cur.close(); conn.close()"
+
       - name: Run tests with pytest
         run: |
           pytest -v -s
