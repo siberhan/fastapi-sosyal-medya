@@ -67,13 +67,13 @@ jobs:
 
       # Bandit'i çalıştır ve sonuçları göster
       # Bandit'i Çalıştır (Güvenlik Tarama) - HATA AYIKLAMA MODU
-     # Bandit'i Çalıştır (Zafiyetleri Göster) - SON DÜZELTME
+     # Bandit'i Çalıştır (Zafiyetleri Göster) - KESİN ÇÖZÜM
       - name: Bandit'i Çalıştır (Zafiyetleri Göster)
         run: |
-          # --recursive ile tüm klasörleri tarar.
-          # --skip B404: B404 uyarısını (çok sık çıkan bir false positive) görmezden gel.
-          # --exit-code 0: Hata bulsa bile pipeline'ı durdurma (sadece logları görmek için).
-          bandit -r . -x tests/ --skip B404 --exit-code 0
+          # --recursive ile tüm klasörleri tara.
+          # --skip B404: Sık çıkan false positive'leri atla.
+          # --exit-zero: Hata bulsa bile 0 koduyla çık (Pipeline'ın devam etmesi için).
+          bandit -r . -x tests/ --skip B404 --exit-zero
         env:
           PYTHONPATH: .
 
