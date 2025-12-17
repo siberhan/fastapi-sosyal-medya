@@ -9,6 +9,10 @@ from app.oauth2 import create_access_token
 from app import models
 import pytest
 
+# --- YENİ IMPORTLAR ---
+from unittest.mock import MagicMock
+from fastapi_limiter import FastAPILimiter
+
 # 1. VERİTABANI BAĞLANTISI
 SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test"
 
@@ -97,3 +101,17 @@ def test_vote(test_posts, session, test_user):
     new_vote = models.Vote(post_id=test_posts[0].id, user_id=test_user['id'])
     session.add(new_vote)
     session.commit()
+
+
+# --- SİHİRLİ FIXTURE (Bunu dosyanın herhangi bir yerine ekle) ---
+@pytest.fixture(autouse=True)
+def mock_redis_for_limiter():
+    """
+    Bu fixture her testten önce otomatik çalışır.
+    FastAPILimiter'ın redis bağlantısını taklit eder (Mocklar).
+    Böylece testlerde 'Redis yok' hatası almayız.
+    """
+    FastAPILimiter.redis = MagicMock()
+    yield
+    FastAPILimiter.redis = None
+# -------------------------------------------------------------

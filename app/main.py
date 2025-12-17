@@ -7,10 +7,27 @@ from .database import engine       # 'from app.database' yerine (aynı klasörde
 from .routers import post, user, auth, vote # 'from routers' yerine
 # ----------------------------------------------
 
+from fastapi_limiter import FastAPILimiter
+from redis import asyncio as aioredis
+import os
+
 # Tabloları oluştur (Alembic kullanıyorsan burası opsiyoneldir ama kalsın)
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+@app.on_event("startup")
+async def startup():
+    # Docker içindeki servis adı "redis". Lokal testte "localhost"
+    redis_host = os.environ.get("REDIS_HOSTNAME", "localhost")
+    try:
+        redis = aioredis.from_url(f"redis://{redis_host}", encoding="utf-8", decode_responses=True)
+        await FastAPILimiter.init(redis)
+        print("✅ Redis bağlantısı ve Rate Limiter başarıyla başlatıldı.")
+    except Exception as e:
+        print(f"⚠️ Redis bağlantı hatası: {e}")
+        print("Rate Limiting devre dışı kalabilir.")
+# ---------------------------------
 
 origins = ["*"]
 

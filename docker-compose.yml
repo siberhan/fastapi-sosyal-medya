@@ -27,5 +27,12 @@ services:
     volumes:
       - postgres-db:/var/lib/postgresql/data # Veriler kaybolmasın diye volume
 
+#Rate limiter servisi
+redis:
+    image: redis:alpine
+    volumes:
+      - redis_data:/data
+
 volumes:
   postgres-db:
+  redis_data:
