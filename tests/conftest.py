@@ -8,42 +8,15 @@ from app.oauth2 import create_access_token
 from app import models
 import pytest
 
-# --- MOCKING İÇİN GEREKLİ IMPORTLAR ---
-from unittest.mock import MagicMock, AsyncMock
-from fastapi_limiter import FastAPILimiter
-# --------------------------------------
+# --- ÖNEMLİ: Auth dosyasındaki o değişkeni buraya çağırıyoruz ---
+from app.routers.auth import login_limiter
+# ---------------------------------------------------------------
 
 # 1. VERİTABANI BAĞLANTISI
 SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# --- SİHİRLİ FIXTURE (Redis ve Identifier Mock) ---
-@pytest.fixture(autouse=True)
-def mock_redis_for_limiter():
-    """
-    Bu fixture her testten önce otomatik çalışır.
-    FastAPILimiter'ın redis bağlantısını VE tanımlayıcısını taklit eder.
-    """
-    # 1. Redis'i Mockla (AsyncMock ile)
-    mock_redis = AsyncMock()
-    mock_redis.pipeline.return_value.__aenter__.return_value = AsyncMock()
-    FastAPILimiter.redis = mock_redis
-    
-    # 2. Identifier'ı Mockla (HATA BURADAYDI! EKLENDİ ✅)
-    # Kütüphane "Bu kim?" diye sorduğunda "127.0.0.1" cevabını verecek sahte fonksiyon.
-    async def mock_identifier(request):
-        return "127.0.0.1"
-    
-    FastAPILimiter.identifier = mock_identifier
-    
-    yield
-    
-    # Temizlik
-    FastAPILimiter.redis = None
-    FastAPILimiter.identifier = None
-# ------------------------------------
 
 # 2. SESSION FIXTURE
 @pytest.fixture()
@@ -57,9 +30,14 @@ def session():
     finally:
         db.close()
 
-# 3. STANDART CLIENT
+# 3. STANDART CLIENT (Tertemiz Override Yöntemi)
 @pytest.fixture()
 def client(session):
+    # İŞTE ÇÖZÜM BURADA:
+    # "login_limiter" gördüğün yere "boş fonksiyon" koy diyoruz.
+    # Böylece kod Redis'e hiç gitmiyor, hata verme şansı kalmıyor.
+    app.dependency_overrides[login_limiter] = lambda: None
+
     def override_get_db():
         try:
             yield session
@@ -67,7 +45,10 @@ def client(session):
             session.close()
 
     app.dependency_overrides[get_db] = override_get_db
+    
     yield TestClient(app)
+    
+    # Temizlik
     app.dependency_overrides.clear()
 
 # 4. TEST USER
