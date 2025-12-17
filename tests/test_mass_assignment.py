@@ -12,3 +12,5 @@ def test_user_cannot_update_role_via_profile_update(authorized_client, test_user
     updated_user = session.query(models.User).filter(models.User.id == test_user['id']).first()
     
     assert updated_user.role == "user"
+
+    
