@@ -9,7 +9,7 @@ from app import models
 import pytest
 
 # --- MOCKING İÇİN GEREKLİ IMPORTLAR ---
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, AsyncMock # AsyncMock eklendi!
 from fastapi_limiter import FastAPILimiter
 # --------------------------------------
 
@@ -24,10 +24,15 @@ TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engin
 def mock_redis_for_limiter():
     """
     Bu fixture her testten önce otomatik çalışır.
-    FastAPILimiter'ın redis bağlantısını taklit eder (Mocklar).
-    Böylece testlerde 'Redis yok' hatası almayız.
+    FastAPILimiter'ın redis bağlantısını AsyncMock ile taklit eder.
+    Böylece 'await redis...' çağrıları testte hata vermez.
     """
-    FastAPILimiter.redis = MagicMock()
+    # AsyncMock kullanıyoruz çünkü kütüphane 'await' kullanıyor
+    mock_redis = AsyncMock()
+    # Pipeline çağrıları da zincirleme çalıştığı için onları da mockluyoruz
+    mock_redis.pipeline.return_value.__aenter__.return_value = AsyncMock() 
+    
+    FastAPILimiter.redis = mock_redis
     yield
     FastAPILimiter.redis = None
 # ------------------------------------
@@ -47,8 +52,8 @@ def session():
 # 3. STANDART CLIENT (GİRİŞ YAPMAMIŞ)
 @pytest.fixture()
 def client(session):
-    # HATA ÇIKARAN SATIR SİLİNDİ: app.dependency_overrides[RateLimiter]...
-    # Artık buna gerek yok çünkü Redis'i zaten mock'ladık.
+    # Dependency override ile RateLimiter'ı ezmeye GEREK YOK.
+    # Çünkü yukarıda Redis'i mockladık, Limiter çalışacak ama Redis var sanacak.
 
     def override_get_db():
         try:
@@ -56,7 +61,7 @@ def client(session):
         finally:
             session.close()
 
-    # Girinti (Indent) düzeltildi, fonksiyonun dışında duruyor.
+    # DÜZELTME: Bu satır kesinlikle fonksiyonun DIŞINDA olmalı (Girinti Hatası Giderildi)
     app.dependency_overrides[get_db] = override_get_db
     
     yield TestClient(app)
