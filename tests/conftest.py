@@ -9,7 +9,7 @@ from app import models
 import pytest
 
 # --- MOCKING İÇİN GEREKLİ IMPORTLAR ---
-from unittest.mock import MagicMock, AsyncMock # AsyncMock eklendi!
+from unittest.mock import MagicMock, AsyncMock
 from fastapi_limiter import FastAPILimiter
 # --------------------------------------
 
@@ -19,25 +19,33 @@ SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.database_username}:{settings.
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# --- SİHİRLİ FIXTURE (Redis Mock) ---
+# --- SİHİRLİ FIXTURE (Redis ve Identifier Mock) ---
 @pytest.fixture(autouse=True)
 def mock_redis_for_limiter():
     """
     Bu fixture her testten önce otomatik çalışır.
-    FastAPILimiter'ın redis bağlantısını AsyncMock ile taklit eder.
-    Böylece 'await redis...' çağrıları testte hata vermez.
+    FastAPILimiter'ın redis bağlantısını VE tanımlayıcısını taklit eder.
     """
-    # AsyncMock kullanıyoruz çünkü kütüphane 'await' kullanıyor
+    # 1. Redis'i Mockla (AsyncMock ile)
     mock_redis = AsyncMock()
-    # Pipeline çağrıları da zincirleme çalıştığı için onları da mockluyoruz
-    mock_redis.pipeline.return_value.__aenter__.return_value = AsyncMock() 
-    
+    mock_redis.pipeline.return_value.__aenter__.return_value = AsyncMock()
     FastAPILimiter.redis = mock_redis
+    
+    # 2. Identifier'ı Mockla (HATA BURADAYDI! EKLENDİ ✅)
+    # Kütüphane "Bu kim?" diye sorduğunda "127.0.0.1" cevabını verecek sahte fonksiyon.
+    async def mock_identifier(request):
+        return "127.0.0.1"
+    
+    FastAPILimiter.identifier = mock_identifier
+    
     yield
+    
+    # Temizlik
     FastAPILimiter.redis = None
+    FastAPILimiter.identifier = None
 # ------------------------------------
 
-# 2. SESSION FIXTURE (DB TABLOLARINI YÖNETİR)
+# 2. SESSION FIXTURE
 @pytest.fixture()
 def session():
     print("Test veritabanı tabloları oluşturuluyor...")
@@ -49,27 +57,20 @@ def session():
     finally:
         db.close()
 
-# 3. STANDART CLIENT (GİRİŞ YAPMAMIŞ)
+# 3. STANDART CLIENT
 @pytest.fixture()
 def client(session):
-    # Dependency override ile RateLimiter'ı ezmeye GEREK YOK.
-    # Çünkü yukarıda Redis'i mockladık, Limiter çalışacak ama Redis var sanacak.
-
     def override_get_db():
         try:
             yield session
         finally:
             session.close()
 
-    # DÜZELTME: Bu satır kesinlikle fonksiyonun DIŞINDA olmalı (Girinti Hatası Giderildi)
     app.dependency_overrides[get_db] = override_get_db
-    
     yield TestClient(app)
-    
-    # Temizlik
     app.dependency_overrides.clear()
 
-# 4. TEST USER FIXTURE (OTOMATİK KULLANICI OLUŞTURUR)
+# 4. TEST USER
 @pytest.fixture
 def test_user(client):
     user_data = {"email": "testuser@gmail.com", "password": "password123"}
@@ -79,12 +80,12 @@ def test_user(client):
     new_user['password'] = user_data['password']
     return new_user
 
-# 5. TOKEN FIXTURE (KULLANICI İÇİN TOKEN ÜRETİR)
+# 5. TOKEN
 @pytest.fixture
 def token(test_user):
     return create_access_token({"user_id": test_user['id']})
 
-# 6. AUTHORIZED CLIENT (TOKEN EKLENMİŞ İSTEMCİ)
+# 6. AUTHORIZED CLIENT
 @pytest.fixture
 def authorized_client(client, token):
     client.headers = {
@@ -93,7 +94,7 @@ def authorized_client(client, token):
     }
     return client
 
-# 7. TEST POSTS FIXTURE (DB'YE HAZIR POSTLAR EKLER)
+# 7. TEST POSTS
 @pytest.fixture
 def test_posts(test_user, session):
     posts_data = [{
@@ -110,7 +111,6 @@ def test_posts(test_user, session):
         "owner_id": test_user['id']
     }]
     
-    # Map fonksiyonu ile sözlükleri Post modeline çeviriyoruz
     def create_post_model(post):
         return models.Post(**post)
     
