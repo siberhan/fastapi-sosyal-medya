@@ -9,15 +9,30 @@ from app.oauth2 import create_access_token
 from app import models
 import pytest
 
-# --- YENİ IMPORTLAR ---
+# --- MOCKING İÇİN GEREKLİ IMPORTLAR ---
 from unittest.mock import MagicMock
 from fastapi_limiter import FastAPILimiter
+from fastapi_limiter.depends import RateLimiter 
+# --------------------------------------
 
 # 1. VERİTABANI BAĞLANTISI
 SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# --- SİHİRLİ FIXTURE (Redis Mock) ---
+@pytest.fixture(autouse=True)
+def mock_redis_for_limiter():
+    """
+    Bu fixture her testten önce otomatik çalışır.
+    FastAPILimiter'ın redis bağlantısını taklit eder (Mocklar).
+    Böylece testlerde 'Redis yok' hatası almayız.
+    """
+    FastAPILimiter.redis = MagicMock()
+    yield
+    FastAPILimiter.redis = None
+# ------------------------------------
 
 # 2. SESSION FIXTURE (DB TABLOLARINI YÖNETİR)
 @pytest.fixture()
@@ -34,13 +49,23 @@ def session():
 # 3. STANDART CLIENT (GİRİŞ YAPMAMIŞ)
 @pytest.fixture()
 def client(session):
+
+    # Rate Limiting'i geçersiz kıl:
+    app.dependency_overrides[RateLimiter] = lambda: None
+
     def override_get_db():
         try:
             yield session
         finally:
             session.close()
+
+    # DÜZELTME: Bu satır fonksiyonun DIŞINDA olmalı
     app.dependency_overrides[get_db] = override_get_db
+    
     yield TestClient(app)
+    
+    # Temizlik
+    app.dependency_overrides.clear()
 
 # 4. TEST USER FIXTURE (OTOMATİK KULLANICI OLUŞTURUR)
 @pytest.fixture
@@ -101,17 +126,3 @@ def test_vote(test_posts, session, test_user):
     new_vote = models.Vote(post_id=test_posts[0].id, user_id=test_user['id'])
     session.add(new_vote)
     session.commit()
-
-
-# --- SİHİRLİ FIXTURE (Bunu dosyanın herhangi bir yerine ekle) ---
-@pytest.fixture(autouse=True)
-def mock_redis_for_limiter():
-    """
-    Bu fixture her testten önce otomatik çalışır.
-    FastAPILimiter'ın redis bağlantısını taklit eder (Mocklar).
-    Böylece testlerde 'Redis yok' hatası almayız.
-    """
-    FastAPILimiter.redis = MagicMock()
-    yield
-    FastAPILimiter.redis = None
-# -------------------------------------------------------------
