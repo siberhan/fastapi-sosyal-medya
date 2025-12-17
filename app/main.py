@@ -12,7 +12,7 @@ from redis import asyncio as aioredis
 import os
 
 # Tabloları oluştur (Alembic kullanıyorsan burası opsiyoneldir ama kalsın)
-models.Base.metadata.create_all(bind=engine)
+#models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
