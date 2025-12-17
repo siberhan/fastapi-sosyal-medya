@@ -42,7 +42,7 @@ def client(session):
         try:
             yield session
         finally:
-            session.close()
+            pass
 
     app.dependency_overrides[get_db] = override_get_db
     

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, field_validator, Field
 from datetime import datetime
 from typing import Optional
 
@@ -64,3 +64,19 @@ class PostOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+class UserUpdate(BaseModel):
+    email: Optional[EmailStr] = None
+    password: Optional[str] = Field(None, min_length=8, max_length=100)
+
+    class Config:
+        # Örnek bir veri yapısı göstererek dökümantasyonu (Swagger) güzelleştirirsin
+        schema_extra = {
+            "example": {
+                "email": "yeniemail@example.com",
+                "password": "guclu_sifre_123"
+            }
+        }
+
+    
+
