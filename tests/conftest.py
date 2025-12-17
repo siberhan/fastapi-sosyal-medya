@@ -1,7 +1,6 @@
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
 from app.main import app
 from app.config import settings
 from app.database import get_db, Base
@@ -12,7 +11,6 @@ import pytest
 # --- MOCKING İÇİN GEREKLİ IMPORTLAR ---
 from unittest.mock import MagicMock
 from fastapi_limiter import FastAPILimiter
-from fastapi_limiter.depends import RateLimiter 
 # --------------------------------------
 
 # 1. VERİTABANI BAĞLANTISI
@@ -49,9 +47,8 @@ def session():
 # 3. STANDART CLIENT (GİRİŞ YAPMAMIŞ)
 @pytest.fixture()
 def client(session):
-
-    # Rate Limiting'i geçersiz kıl:
-    app.dependency_overrides[RateLimiter] = lambda: None
+    # HATA ÇIKARAN SATIR SİLİNDİ: app.dependency_overrides[RateLimiter]...
+    # Artık buna gerek yok çünkü Redis'i zaten mock'ladık.
 
     def override_get_db():
         try:
@@ -59,7 +56,7 @@ def client(session):
         finally:
             session.close()
 
-    # DÜZELTME: Bu satır fonksiyonun DIŞINDA olmalı
+    # Girinti (Indent) düzeltildi, fonksiyonun dışında duruyor.
     app.dependency_overrides[get_db] = override_get_db
     
     yield TestClient(app)
