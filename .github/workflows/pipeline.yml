@@ -5,10 +5,11 @@ on:
     branches: [ "main" ]
 
 jobs:
+
+
   tests:
     runs-on: ubuntu-latest
     env:
-      # PROFESYONEL AYAR: Tüm bağlantıları localhost üzerinden yapıyoruz
       DATABASE_HOSTNAME: localhost
       DATABASE_PORT: 5432
       DATABASE_PASSWORD: 3012
@@ -53,12 +54,10 @@ jobs:
           pip install -r requirements.txt
       - name: Test Veritabanı Oluştur ve Testleri Çalıştır
         run: |
-          # BURASI ÇOK ÖNEMLİ: host='localhost' yaparak GitHub runner'ın 
-          # port yönlendirmesini (mapping) kullanmasını sağlıyoruz.
           python -c "import psycopg2; conn = psycopg2.connect(user='postgres', password='3012', host='localhost', port='5432'); conn.set_isolation_level(0); cur = conn.cursor(); cur.execute('CREATE DATABASE fastapi_test'); cur.close(); conn.close()"
-          pytest -v -sld-and-push, deploy) 
+          pytest -v -s
 
-          
+
   # olduğu gibi altına ekle, onlarda bir değişiklik yok.
   bandit-scan:
     needs: tests
