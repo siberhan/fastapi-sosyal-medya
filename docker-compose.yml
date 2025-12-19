@@ -3,33 +3,41 @@ version: "3"
 services:
   # 1. BİZİM UYGULAMAMIZ
   api:
-    build: .  # Mevcut klasördeki Dockerfile'ı kullan
+    build: .
     ports:
-      - "9000:8000" # Dışarıdan 8000, içeriden 8000
+      - "9999:8000" # Genelde 8000:8000 kullanırız, 9000 yaptıysan öyle kalsın
     depends_on:
-      - postgres # Önce veritabanı başlasın
-    # Docker içinde 'localhost' çalışmaz, servis ismini (postgres) kullanırız
+      - postgres
+      - redis # Redis'in de hazır olmasını bekle
     env_file:
       - .env
     environment:
-      - DATABASE_HOSTNAME=postgres # <--- KRİTİK NOKTA!
+      - DATABASE_HOSTNAME=postgres
       - DATABASE_PORT=5432
       - DATABASE_PASSWORD=3012
       - DATABASE_NAME=fastapi
       - DATABASE_USERNAME=postgres
+      - REDIS_HOSTNAME=redis # <--- Docker içinde iletişim için servis adı
+      - REDIS_PORT=6379
 
   # 2. VERİTABANI SERVİSİ (POSTGRESQL)
   postgres:
     image: postgres:15-alpine
+    container_name: postgres-db
     environment:
       - POSTGRES_PASSWORD=3012
       - POSTGRES_DB=fastapi
     volumes:
-      - postgres-db:/var/lib/postgresql/data # Veriler kaybolmasın diye volume
+      - postgres-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
-#Rate limiter servisi
-redis:
+  # 3. REDIS (Artık services içinde!)
+  redis:
     image: redis:alpine
+    container_name: redis-server
+    ports:
+      - "6379:6379" # Dışarıdan (Postman vb.) erişebilmek için
     volumes:
       - redis_data:/data
 

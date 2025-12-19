@@ -9,6 +9,11 @@ class Settings(BaseSettings):
     secret_key: str
     algorithm: str
     access_token_expire_minutes: int
+    # --- YENİ EKLENENLER ---
+    refresh_token_expire_days: int = 7
+    redis_hostname: str = "localhost" # Docker'da çalışırken "redis" olacak
+    redis_port: int = 6379
+    # -----------------------
 
     class Config:
         env_file = ".env"

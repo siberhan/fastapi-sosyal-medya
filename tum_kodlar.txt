@@ -1,0 +1,1936 @@
+
+==================================================
+DOSYA: .\.env
+==================================================
+
+DATABASE_HOSTNAME=localhost
+DATABASE_PORT=5432
+DATABASE_PASSWORD=3012
+DATABASE_NAME=fastapi
+DATABASE_USERNAME=postgres
+SECRET_KEY=ben_kediler_kopekleri_bir_de_tavuklari_cok_severim
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
+REDIS_HOSTNAME=localhost
+REDIS_PORT=6379
+
+==================================================
+DOSYA: .\.gitignore
+==================================================
+
+venv/
+__pycache__/
+.env
+
+==================================================
+DOSYA: .\alembic.ini
+==================================================
+
+# A generic, single database configuration.
+
+[alembic]
+# path to migration scripts.
+# this is typically a path given in POSIX (e.g. forward slashes)
+# format, relative to the token %(here)s which refers to the location of this
+# ini file
+script_location = %(here)s/alembic
+
+# template used to generate migration file names; The default value is %%(rev)s_%%(slug)s
+# Uncomment the line below if you want the files to be prepended with date and time
+# see https://alembic.sqlalchemy.org/en/latest/tutorial.html#editing-the-ini-file
+# for all available tokens
+# file_template = %%(year)d_%%(month).2d_%%(day).2d_%%(hour).2d%%(minute).2d-%%(rev)s_%%(slug)s
+
+# sys.path path, will be prepended to sys.path if present.
+# defaults to the current working directory.  for multiple paths, the path separator
+# is defined by "path_separator" below.
+prepend_sys_path = .
+
+
+# timezone to use when rendering the date within the migration file
+# as well as the filename.
+# If specified, requires the tzdata library which can be installed by adding
+# `alembic[tz]` to the pip requirements.
+# string value is passed to ZoneInfo()
+# leave blank for localtime
+# timezone =
+
+# max length of characters to apply to the "slug" field
+# truncate_slug_length = 40
+
+# set to 'true' to run the environment during
+# the 'revision' command, regardless of autogenerate
+# revision_environment = false
+
+# set to 'true' to allow .pyc and .pyo files without
+# a source .py file to be detected as revisions in the
+# versions/ directory
+# sourceless = false
+
+# version location specification; This defaults
+# to <script_location>/versions.  When using multiple version
+# directories, initial revisions must be specified with --version-path.
+# The path separator used here should be the separator specified by "path_separator"
+# below.
+# version_locations = %(here)s/bar:%(here)s/bat:%(here)s/alembic/versions
+
+# path_separator; This indicates what character is used to split lists of file
+# paths, including version_locations and prepend_sys_path within configparser
+# files such as alembic.ini.
+# The default rendered in new alembic.ini files is "os", which uses os.pathsep
+# to provide os-dependent path splitting.
+#
+# Note that in order to support legacy alembic.ini files, this default does NOT
+# take place if path_separator is not present in alembic.ini.  If this
+# option is omitted entirely, fallback logic is as follows:
+#
+# 1. Parsing of the version_locations option falls back to using the legacy
+#    "version_path_separator" key, which if absent then falls back to the legacy
+#    behavior of splitting on spaces and/or commas.
+# 2. Parsing of the prepend_sys_path option falls back to the legacy
+#    behavior of splitting on spaces, commas, or colons.
+#
+# Valid values for path_separator are:
+#
+# path_separator = :
+# path_separator = ;
+# path_separator = space
+# path_separator = newline
+#
+# Use os.pathsep. Default configuration used for new projects.
+path_separator = os
+
+# set to 'true' to search source files recursively
+# in each "version_locations" directory
+# new in Alembic version 1.10
+# recursive_version_locations = false
+
+# the output encoding used when revision files
+# are written from script.py.mako
+# output_encoding = utf-8
+
+# database URL.  This is consumed by the user-maintained env.py script only.
+# other means of configuring database URLs may be customized within the env.py
+# file.
+sqlalchemy.url = driver://user:pass@localhost/dbname
+
+
+[post_write_hooks]
+# post_write_hooks defines scripts or Python functions that are run
+# on newly generated revision scripts.  See the documentation for further
+# detail and examples
+
+# format using "black" - use the console_scripts runner, against the "black" entrypoint
+# hooks = black
+# black.type = console_scripts
+# black.entrypoint = black
+# black.options = -l 79 REVISION_SCRIPT_FILENAME
+
+# lint with attempts to fix using "ruff" - use the module runner, against the "ruff" module
+# hooks = ruff
+# ruff.type = module
+# ruff.module = ruff
+# ruff.options = check --fix REVISION_SCRIPT_FILENAME
+
+# Alternatively, use the exec runner to execute a binary found on your PATH
+# hooks = ruff
+# ruff.type = exec
+# ruff.executable = ruff
+# ruff.options = check --fix REVISION_SCRIPT_FILENAME
+
+# Logging configuration.  This is also consumed by the user-maintained
+# env.py script only.
+[loggers]
+keys = root,sqlalchemy,alembic
+
+[handlers]
+keys = console
+
+[formatters]
+keys = generic
+
+[logger_root]
+level = WARNING
+handlers = console
+qualname =
+
+[logger_sqlalchemy]
+level = WARNING
+handlers =
+qualname = sqlalchemy.engine
+
+[logger_alembic]
+level = INFO
+handlers =
+qualname = alembic
+
+[handler_console]
+class = StreamHandler
+args = (sys.stderr,)
+level = NOTSET
+formatter = generic
+
+[formatter_generic]
+format = %(levelname)-5.5s [%(name)s] %(message)s
+datefmt = %H:%M:%S
+
+
+==================================================
+DOSYA: .\c
+==================================================
+
+[33mb389302[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m FIX: MagicMock ile FastAPILimiter test bagimliligi bypass edildi
+[33mb3f7e34[m FIX: Testlerde Rate Limiting override guncellendi (Kesin cozum)
+[33mc6be653[m FIX: Testlerde Rate Limiting bagimliligi gecersiz kilindi
+[33mca3a71f[m SEC: Rate Limiting login endpointine eklendi
+[33ma252c0a[m SEC: Bandit B105 hardcoded password duzeltildi ve B101 atlandi
+[33m4a69a3b[m SEC: Bandit B105 hardcoded password duzeltildi ve B101 atlandi
+[33mb7f9c5d[m DEBUG: Bandit taramasi exit-code 0 ile tekrar calistiriliyor, zafiyet aranacak
+[33m42eab0b[m DEBUG: Bandit taramasi exit-code 0 ile tekrar calistiriliyor, zafiyet aranacak
+[33m1057ce9[m DEBUG: Bandit taramasi exit-code 0 ile tekrar calistiriliyor, zafiyet aranacak
+[33m17e9e0f[m FIX: Bandit action hatasi duzeltildi, manuel kurulum eklendi
+[33m8fb43f1[m DevSecOps Pipeline duzeltildi ve Bandit/Trivy eklendi
+[33m7636846[m Pipeline birlestirildi: Test + Docker + Deploy
+[33mbb3af19[m DevSecOps pipeline eklendi
+[33me2bbb7f[m Pipeline birlestirildi: Once Test Sonra Deploy
+[33m0143003[m build.yml sifreler duzeltildi
+[33m39c1a68[m requirements.txt guncellendi, pytest eklendi
+[33me20c3dc[m Github Actions workflow eklendi
+[33m5a4f331[m Test altyapisi tamamlandi ve refactoring yapildi
+[33m2e346d8[m mesaji degistirdim ve otomasyonu deniyorum
+[33mdb76a5a[m ci cd pipeline eklendi
+[33m99857ce[m Kutuphane listesi eklendi
+[33me405227[m FastAPI projesi tamamlandi
+[33m27cb5b4[m FastAPI projesi tamamlandı
+
+
+==================================================
+DOSYA: .\docker-compose.yml
+==================================================
+
+version: "3"
+
+services:
+  # 1. BİZİM UYGULAMAMIZ
+  api:
+    build: .
+    ports:
+      - "9999:8000" # Genelde 8000:8000 kullanırız, 9000 yaptıysan öyle kalsın
+    depends_on:
+      - postgres
+      - redis # Redis'in de hazır olmasını bekle
+    env_file:
+      - .env
+    environment:
+      - DATABASE_HOSTNAME=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_PASSWORD=3012
+      - DATABASE_NAME=fastapi
+      - DATABASE_USERNAME=postgres
+      - REDIS_HOSTNAME=redis # <--- Docker içinde iletişim için servis adı
+      - REDIS_PORT=6379
+
+  # 2. VERİTABANI SERVİSİ (POSTGRESQL)
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    environment:
+      - POSTGRES_PASSWORD=3012
+      - POSTGRES_DB=fastapi
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # 3. REDIS (Artık services içinde!)
+  redis:
+    image: redis:alpine
+    container_name: redis-server
+    ports:
+      - "6379:6379" # Dışarıdan (Postman vb.) erişebilmek için
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres-db:
+  redis_data:
+
+==================================================
+DOSYA: .\Dockerfile
+==================================================
+
+# 1. Hangi Python sürümü üzerine kuracağız? (Temel İmaj)
+FROM python:3.10
+
+# 2. Container'ın içinde hangi klasörde çalışacağız?
+WORKDIR /usr/src/app
+
+# 3. Önce requirements dosyasını kopyala
+# (Bunu ayrı yapıyoruz ki kod değişse bile kütüphaneleri tekrar tekrar indirmesin - Cache mantığı)
+COPY requirements.txt ./
+
+# 4. Kütüphaneleri yükle
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 5. Şimdi geri kalan bütün proje dosyalarını kopyala
+COPY . .
+
+# 6. Uygulamayı başlat (Uvicorn ile)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+
+==================================================
+DOSYA: .\requirements.txt
+==================================================
+
+a n n o t a t e d - d o c = = 0 . 0 . 4 
+ 
+ a n n o t a t e d - t y p e s = = 0 . 7 . 0 
+ 
+ a n y i o = = 4 . 1 2 . 0 
+ 
+ b c r y p t = = 4 . 0 . 1 
+ 
+ c e r t i f i = = 2 0 2 5 . 1 1 . 1 2 
+ 
+ c f f i = = 2 . 0 . 0 
+ 
+ c l i c k = = 8 . 3 . 1 
+ 
+ c o l o r a m a = = 0 . 4 . 6 
+ 
+ c r y p t o g r a p h y = = 4 6 . 0 . 3 
+ 
+ d n s p y t h o n = = 2 . 8 . 0 
+ 
+ e c d s a = = 0 . 1 9 . 1 
+ 
+ e m a i l - v a l i d a t o r = = 2 . 3 . 0 
+ 
+ f a s t a p i = = 0 . 1 2 3 . 9 
+ 
+ f a s t a p i - c l i = = 0 . 0 . 1 6 
+ 
+ f a s t a p i - c l o u d - c l i = = 0 . 6 . 0 
+ 
+ f a s t a r = = 0 . 8 . 0 
+ 
+ g r e e n l e t = = 3 . 3 . 0 
+ 
+ h 1 1 = = 0 . 1 6 . 0 
+ 
+ h t t p c o r e = = 1 . 0 . 9 
+ 
+ h t t p t o o l s = = 0 . 7 . 1 
+ 
+ h t t p x = = 0 . 2 8 . 1 
+ 
+ i d n a = = 3 . 1 1 
+ 
+ i n i c o n f i g = = 2 . 3 . 0 
+ 
+ i t s d a n g e r o u s = = 2 . 2 . 0 
+ 
+ J i n j a 2 = = 3 . 1 . 6 
+ 
+ m a r k d o w n - i t - p y = = 4 . 0 . 0 
+ 
+ M a r k u p S a f e = = 3 . 0 . 3 
+ 
+ m d u r l = = 0 . 1 . 2 
+ 
+ o r j s o n = = 3 . 1 1 . 4 
+ 
+ p a c k a g i n g = = 2 5 . 0 
+ 
+ p a s s l i b = = 1 . 7 . 4 
+ 
+ p l u g g y = = 1 . 6 . 0 
+ 
+ p s y c o p g 2 = = 2 . 9 . 1 1 
+ 
+ p y a s n 1 = = 0 . 6 . 1 
+ 
+ p y c p a r s e r = = 2 . 2 3 
+ 
+ p y d a n t i c = = 2 . 1 2 . 5 
+ 
+ p y d a n t i c - e x t r a - t y p e s = = 2 . 1 0 . 6 
+ 
+ p y d a n t i c - s e t t i n g s = = 2 . 1 2 . 0 
+ 
+ p y d a n t i c _ c o r e = = 2 . 4 1 . 5 
+ 
+ P y g m e n t s = = 2 . 1 9 . 2 
+ 
+ p y t e s t = = 9 . 0 . 2 
+ 
+ p y t h o n - d o t e n v = = 1 . 2 . 1 
+ 
+ p y t h o n - j o s e = = 3 . 5 . 0 
+ 
+ p y t h o n - m u l t i p a r t = = 0 . 0 . 2 0 
+ 
+ P y Y A M L = = 6 . 0 . 3 
+ 
+ r i c h = = 1 4 . 2 . 0 
+ 
+ r i c h - t o o l k i t = = 0 . 1 7 . 0 
+ 
+ r i g n o r e = = 0 . 7 . 6 
+ 
+ r s a = = 4 . 9 . 1 
+ 
+ s e n t r y - s d k = = 2 . 4 7 . 0 
+ 
+ s h e l l i n g h a m = = 1 . 5 . 4 
+ 
+ s i x = = 1 . 1 7 . 0 
+ 
+ S Q L A l c h e m y = = 2 . 0 . 4 5 
+ 
+ s t a r l e t t e = = 0 . 5 0 . 0 
+ 
+ t y p e r = = 0 . 2 0 . 0 
+ 
+ t y p i n g - i n s p e c t i o n = = 0 . 4 . 2 
+ 
+ t y p i n g _ e x t e n s i o n s = = 4 . 1 5 . 0 
+ 
+ u j s o n = = 5 . 1 1 . 0 
+ 
+ u r l l i b 3 = = 2 . 6 . 0 
+ 
+ u v i c o r n = = 0 . 3 8 . 0 
+ 
+ w a t c h f i l e s = = 1 . 1 . 1 
+ 
+ w e b s o c k e t s = = 1 5 . 0 . 1 
+ 
+ f a s t a p i - l i m i t e r = = 0 . 1 . 6 
+ 
+ r e d i s = = 7 . 1 . 0 
+ 
+ a l e m b i c = = 1 . 1 7 . 2 
+
+==================================================
+DOSYA: .\.github\workflows\pipeline.yml
+==================================================
+
+name: CI/CD Pipeline 🚀
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_HOSTNAME: localhost
+      DATABASE_PORT: 5432
+      DATABASE_PASSWORD: 3012
+      DATABASE_NAME: fastapi_test # Test veritabanı ismiyle eşitledik
+      DATABASE_USERNAME: postgres
+      SECRET_KEY: "ben_kediler_kopekleri_bir_de_tavuklari_cok_severim"
+      ALGORITHM: "HS256"
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      REFRESH_TOKEN_EXPIRE_DAYS: 7
+      REDIS_HOSTNAME: localhost
+      REDIS_PORT: 6379
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: 3012
+          POSTGRES_DB: fastapi # Ana DB olarak kalsın, biz scriptle test DB'yi açacağız
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Kodları Çek
+        uses: actions/checkout@v4
+
+      - name: Python Kur
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Bağımlılıkları Yükle
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Test Veritabanı Oluştur ve Testleri Çalıştır
+        run: |
+          # Postgres'in hazır olması için kısa bir bekleme (opsiyonel ama garanti olur)
+          python -c "import psycopg2; conn = psycopg2.connect(user='postgres', password='3012', host='localhost', port='5432'); conn.set_isolation_level(0); cur = conn.cursor(); cur.execute('DROP DATABASE IF EXISTS fastapi_test'); cur.execute('CREATE DATABASE fastapi_test'); cur.close(); conn.close()"
+          pytest -v -s
+
+  bandit-scan:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bandit Çalıştır
+        run: |
+          pip install bandit
+          bandit -r . -x tests/ --skip B404,B101 --exit-zero
+
+  trivy-scan:
+    needs: bandit-scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Zafiyet Tara
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          severity: 'HIGH,CRITICAL'
+          scan-ref: '.'
+          format: 'table'
+
+  build-and-push:
+    needs: [tests, bandit-scan, trivy-scan]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Docker Hub Login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build ve Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: bedozsylr/fastapi-sosyal-medya:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sunucuya Dağıt
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.PROD_HOST }}
+          username: ${{ secrets.PROD_USERNAME }}
+          key: ${{ secrets.PROD_SSH_KEY }}
+          script: |
+            cd ~/docker-app
+            docker-compose pull
+            docker-compose up -d
+
+==================================================
+DOSYA: .\alembic\env.py
+==================================================
+
+from logging.config import fileConfig
+
+from sqlalchemy import engine_from_config
+from sqlalchemy import pool
+
+from alembic import context
+
+# --- SENİN PROJENE ÖZEL AYARLAR ---
+from app.models import Base  # Tablolarını (Metadata) buradan alacak
+from app.config import settings # Veritabanı şifresini buradan alacak
+# ----------------------------------
+
+# Alembic Config nesnesi
+config = context.config
+
+# Loglama ayarları
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
+
+# --- KRİTİK AYAR 1: Metadata Bağlantısı ---
+# Alembic'in senin tablolarını tanıması için bu satır şart!
+target_metadata = Base.metadata
+
+# --- KRİTİK AYAR 2: Dinamik Veritabanı URL'si ---
+# alembic.ini dosyasındaki dummy URL yerine, senin gerçek ayarlarını kullanıyoruz.
+db_url = f"postgresql+psycopg2://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}"
+config.set_main_option("sqlalchemy.url", db_url)
+
+
+def run_migrations_offline() -> None:
+    """Veritabanına bağlanmadan SQL çıktısı üretir."""
+    url = config.get_main_option("sqlalchemy.url")
+    context.configure(
+        url=url,
+        target_metadata=target_metadata,
+        literal_binds=True,
+        dialect_opts={"paramstyle": "named"},
+    )
+
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+def run_migrations_online() -> None:
+    """Veritabanına bağlanıp değişiklikleri uygular."""
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section),
+        prefix="sqlalchemy.",
+        poolclass=pool.NullPool,
+    )
+
+    with connectable.connect() as connection:
+        context.configure(
+            connection=connection, target_metadata=target_metadata
+        )
+
+        with context.begin_transaction():
+            context.run_migrations()
+
+
+if context.is_offline_mode():
+    run_migrations_offline()
+else:
+    run_migrations_online()
+
+==================================================
+DOSYA: .\alembic\README
+==================================================
+
+Generic single-database configuration.
+
+==================================================
+DOSYA: .\alembic\script.py.mako
+==================================================
+
+"""${message}
+
+Revision ID: ${up_revision}
+Revises: ${down_revision | comma,n}
+Create Date: ${create_date}
+
+"""
+from typing import Sequence, Union
+
+from alembic import op
+import sqlalchemy as sa
+${imports if imports else ""}
+
+# revision identifiers, used by Alembic.
+revision: str = ${repr(up_revision)}
+down_revision: Union[str, Sequence[str], None] = ${repr(down_revision)}
+branch_labels: Union[str, Sequence[str], None] = ${repr(branch_labels)}
+depends_on: Union[str, Sequence[str], None] = ${repr(depends_on)}
+
+
+def upgrade() -> None:
+    """Upgrade schema."""
+    ${upgrades if upgrades else "pass"}
+
+
+def downgrade() -> None:
+    """Downgrade schema."""
+    ${downgrades if downgrades else "pass"}
+
+
+==================================================
+DOSYA: .\app\calculations.py
+==================================================
+
+# app/calculations.py
+
+def add(num1: int, num2: int):
+    return num1 + num2
+
+==================================================
+DOSYA: .\app\config.py
+==================================================
+
+from pydantic_settings import BaseSettings
+
+class Settings(BaseSettings):
+    database_hostname: str
+    database_port: str
+    database_password: str
+    database_name: str
+    database_username: str
+    secret_key: str
+    algorithm: str
+    access_token_expire_minutes: int
+    # --- YENİ EKLENENLER ---
+    refresh_token_expire_days: int = 7
+    redis_hostname: str = "localhost" # Docker'da çalışırken "redis" olacak
+    redis_port: int = 6379
+    # -----------------------
+
+    class Config:
+        env_file = ".env"
+
+settings = Settings()
+
+==================================================
+DOSYA: .\app\database.py
+==================================================
+
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+from app.config import settings # Import etmeyi unutma
+
+# ESKİSİ: SQLALCHEMY_DATABASE_URL = "postgresql://postgres:12345@localhost/fastapi"
+
+# YENİSİ: F-String kullanarak değişkenleri yerleştiriyoruz
+SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}"
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
+
+# --- EKLENEN KISIM ---
+# Bu fonksiyonu main.py'den buraya taşıdık ki tüm routerlar erişebilsin
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+==================================================
+DOSYA: .\app\main.py
+==================================================
+
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+
+# --- DÜZELTİLEN KISIMLAR (Relative Imports) ---
+from . import models               # 'import models' yerine
+from .database import engine       # 'from app.database' yerine (aynı klasördeyiz)
+from .routers import post, user, auth, vote # 'from routers' yerine
+# ----------------------------------------------
+
+from fastapi_limiter import FastAPILimiter
+from redis import asyncio as aioredis
+import os
+
+# Tabloları oluştur (Alembic kullanıyorsan burası opsiyoneldir ama kalsın)
+#models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+
+# --- 2. DEĞİŞİKLİK: GÜVENLİK ZIRHI (YENİ EKLENEN KISIM) ---
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    # Tarayıcıya: "Dosya türünü tahmin etmeye çalışma"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    # Tarayıcıya: "Bu siteyi iframe içine alıp sahte buton koyamazsın"
+    response.headers["X-Frame-Options"] = "DENY"
+    return response
+# ----------------------------------------------------------
+
+@app.on_event("startup")
+async def startup():
+    # Docker içindeki servis adı "redis". Lokal testte "localhost"
+    redis_host = os.environ.get("REDIS_HOSTNAME", "localhost")
+    try:
+        redis = aioredis.from_url(f"redis://{redis_host}", encoding="utf-8", decode_responses=True)
+        await FastAPILimiter.init(redis)
+        print("✅ Redis bağlantısı ve Rate Limiter başarıyla başlatıldı.")
+    except Exception as e:
+        print(f"⚠️ Redis bağlantı hatası: {e}")
+        print("Rate Limiting devre dışı kalabilir.")
+# ---------------------------------
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,      # İzin verilen siteler
+    allow_credentials=True,     # Çerezlere (Cookie) izin ver
+    allow_methods=["*"],        # Tüm metodlara izin ver (GET, POST, DELETE...)
+    allow_headers=["*"],        # Tüm başlıklara (Header) izin ver
+)
+
+# Routerları ana uygulamaya dahil et
+app.include_router(post.router)
+app.include_router(user.router)
+app.include_router(auth.router)
+app.include_router(vote.router)
+
+@app.get("/")
+def root():
+    return {"message": "Selamun Aleykum, burasi artik otomatik guncelleniyor! 🚀"}
+
+==================================================
+DOSYA: .\app\models.py
+==================================================
+
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy.sql.expression import text
+from sqlalchemy.sql.sqltypes import TIMESTAMP
+from app.database import Base
+
+
+# Post tablosunu temsil eden model
+class Post(Base):
+    __tablename__ = "posts" # Veritabanındaki gerçek tablo adı [cite: 544-545]
+
+    # Sütunları tanımlıyoruz [cite: 546-548]
+    id = Column(Integer, primary_key=True, nullable=False)
+    title = Column(String, nullable=False)
+    content = Column(String, nullable=False)
+    published = Column(Boolean, server_default='TRUE', nullable=False)
+    owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    # Otomatik tarih atama (created_at) [cite: 568-571]
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+
+
+
+# Kullanıcı Tablosu Modeli
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    email = Column(String, nullable=False, unique=True) # Email benzersiz olmalı!
+    password = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=text('now()'))
+    role = Column(String, server_default='user', nullable=False)
+
+
+class Vote(Base):
+    __tablename__ = "votes"
+
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
+    post_id = Column(Integer, ForeignKey("posts.id", ondelete="CASCADE"), primary_key=True)
+    
+
+==================================================
+DOSYA: .\app\oauth2.py
+==================================================
+
+from jose import JWTError, jwt
+from datetime import datetime, timedelta
+from fastapi import Depends, status, HTTPException
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.orm import Session
+from .config import settings
+from . import schemas, database, models
+import os
+from redis import asyncio as aioredis # <--- Redis için eklendi
+import uuid
+
+# Login URL'si
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
+
+SECRET_KEY = settings.secret_key
+ALGORITHM = settings.algorithm
+ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
+REFRESH_TOKEN_EXPIRE_DAYS = settings.refresh_token_expire_days
+# Redis bağlantı adresi
+REDIS_URL = f"redis://{os.environ.get('REDIS_HOSTNAME', 'localhost')}"
+
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+# --- YENİ: Refresh Token üreten fonksiyon ---
+def create_refresh_token(data: dict):
+    to_encode = data.copy()
+    
+    # Her refresh token'a benzersiz bir "jti" (JWT ID) veriyoruz
+    # Bu, ileride Redis'te kontrol yaparken çok işimize yarayacak
+    to_encode.update({"jti": str(uuid.uuid4())})
+    
+    # Süresini gün bazında ayarlıyoruz (örn: 7 gün)
+    expire = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    to_encode.update({"exp": expire})
+    
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+def verify_access_token(token: str, credentials_exception):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        id: str = payload.get("user_id")
+        if id is None:
+            raise credentials_exception
+        token_data = schemas.TokenData(id=str(id))
+    except JWTError:
+        raise credentials_exception
+    return token_data
+
+# --- GÜNCELLENEN KRİTİK FONKSİYON ---
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(database.get_db)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    # 1. ADIM: KARA LİSTE KONTROLÜ
+    # Redis'e bağlanıp bu token yasaklı mı bakıyoruz
+    redis = aioredis.from_url(REDIS_URL, encoding="utf-8", decode_responses=True)
+    is_blacklisted = await redis.get(f"blacklist:{token}")
+    await redis.close()
+
+    if is_blacklisted:
+        # Eğer Redis'te bu token varsa, süresi geçmemiş olsa bile kovuyoruz!
+        raise credentials_exception
+
+    # 2. ADIM: TOKEN DOĞRULAMA (Eski mantık)
+    token_data = verify_access_token(token, credentials_exception)
+    
+    # 3. ADIM: VERİTABANI KONTROLÜ
+    user = db.query(models.User).filter(models.User.id == token_data.id).first()
+    
+    if user is None:
+        raise credentials_exception
+        
+    return user
+
+==================================================
+DOSYA: .\app\redis_client.py
+==================================================
+
+import redis.asyncio as aioredis
+from .config import settings
+
+# Redis bağlantı URL'si
+REDIS_URL = f"redis://{settings.redis_hostname}:{settings.redis_port}"
+
+# Global bir redis havuzu oluşturuyoruz
+redis_client = aioredis.from_url(
+    REDIS_URL, 
+    encoding="utf-8", 
+    decode_responses=True
+)
+
+async def get_redis():
+    """Bağlantıyı test eder ve döner"""
+    try:
+        await redis_client.ping()
+        return redis_client
+    except Exception as e:
+        print(f"Redis bağlantı hatası: {e}")
+        raise e
+
+==================================================
+DOSYA: .\app\schemas.py
+==================================================
+
+from pydantic import BaseModel, EmailStr, field_validator, Field
+from datetime import datetime
+from typing import Optional
+
+# Post Şemaları
+class PostBase(BaseModel):
+    title: str
+    content: str
+    published: bool = True
+
+class PostCreate(PostBase):
+    pass
+
+class Post(PostBase):
+    id: int
+    created_at: datetime
+    # Owner_id ileride eklenecek
+    owner_id: int
+    class Config:
+        from_attributes = True
+    
+
+# User Şemaları
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+
+class UserOut(BaseModel):
+    id: int
+    email: EmailStr
+    created_at: datetime
+    class Config:
+        from_attributes = True
+
+#Login Semasi
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+#Token Semasi
+class Token(BaseModel):
+    access_token: str
+    refresh_token: str  # <--- Bunu yeni ekledik
+    token_type: str
+
+class TokenData(BaseModel):
+    id: Optional[str] = None
+
+class Vote(BaseModel):
+    post_id: int
+    dir: int # 1 = Like, 0 = Unlike
+
+    # Pydantic V2 Kullanımı:
+    @field_validator('dir')
+    @classmethod
+    def validate_dir(cls, v: int):
+        if v not in [0, 1]:
+            raise ValueError('dir must be 0 or 1 (0=Unlike, 1=Like)')
+        return v
+    
+# Post ve Beğeni Sayısını beraber döndüren şema
+class PostOut(BaseModel):
+    Post: Post # Daha önce tanımladığımız Post şeması
+    votes: int # Beğeni sayısı
+
+    class Config:
+        from_attributes = True
+
+class UserUpdate(BaseModel):
+    email: Optional[EmailStr] = None
+    password: Optional[str] = Field(None, min_length=8, max_length=100)
+
+    class Config:
+        # Örnek bir veri yapısı göstererek dökümantasyonu (Swagger) güzelleştirirsin
+        schema_extra = {
+            "example": {
+                "email": "yeniemail@example.com",
+                "password": "guclu_sifre_123"
+            }
+        }
+
+    
+
+
+
+==================================================
+DOSYA: .\app\utils.py
+==================================================
+
+from passlib.context import CryptContext
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash(password: str):
+    return pwd_context.hash(password)
+
+# --- YENİ EKLENEN KISIM ---
+def verify(plain_password, hashed_password):
+    # Kullanıcının girdiği düz şifreyi (plain), veritabanındaki hash ile karşılaştırır
+    return pwd_context.verify(plain_password, hashed_password)
+
+
+
+==================================================
+DOSYA: .\app\__init__.py
+==================================================
+
+
+
+==================================================
+DOSYA: .\app\routers\auth.py
+==================================================
+
+from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi.security.oauth2 import OAuth2PasswordRequestForm
+from sqlalchemy.orm import Session
+from .. import database, schemas, models, utils, oauth2
+from fastapi_limiter.depends import RateLimiter 
+from redis import asyncio as aioredis
+from ..config import settings
+# Gerekli ek importlar (Eğer yukarıda yoksa ekle)
+from jose import JWTError, jwt
+from ..oauth2 import SECRET_KEY, ALGORITHM
+
+router = APIRouter(tags=['Authentication'])
+
+# Rate Limiter: 60 saniyede en fazla 5 giriş denemesi
+login_limiter = RateLimiter(times=5, seconds=60)
+
+# Redis bağlantı adresi (Config'den çekiliyor)
+REDIS_URL = f"redis://{settings.redis_hostname}:{settings.redis_port}"
+
+# --- LOGIN ENDPOINT (ÇİFT TOKEN ÜRETİR) ---
+@router.post('/login', response_model=schemas.Token, dependencies=[Depends(login_limiter)])
+async def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(database.get_db)):
+
+    # 1. Kullanıcıyı bul
+    user = db.query(models.User).filter(models.User.email == user_credentials.username).first()
+
+    if not user:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid Credentials")
+
+    # 2. Şifreyi doğrula
+    if not utils.verify(user_credentials.password, user.password):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid Credentials")
+
+    # 3. Access Token Üret (Kısa Süreli)
+    access_token = oauth2.create_access_token(data={"user_id": user.id})
+
+    # 4. Refresh Token Üret (Uzun Süreli)
+    refresh_token = oauth2.create_refresh_token(data={"user_id": user.id})
+
+    # 5. Refresh Token'ı Redis'e Kaydet (TTL ile)
+    redis = aioredis.from_url(REDIS_URL, encoding="utf-8", decode_responses=True)
+    
+    # Anahtar: refresh_token:1 (User ID)
+    # TTL: 7 gün (Saniye cinsinden)
+    await redis.set(
+        f"refresh_token:{user.id}", 
+        refresh_token, 
+        ex=settings.refresh_token_expire_days * 24 * 60 * 60
+    )
+    await redis.close()
+
+    return {
+        "access_token": access_token, 
+        "refresh_token": refresh_token, 
+        "token_type": "bearer"
+    }
+
+# --- LOGOUT ENDPOINT (HER ŞEYİ TEMİZLER) ---
+@router.post('/logout', status_code=status.HTTP_200_OK)
+async def logout(token: str = Depends(oauth2.oauth2_scheme), 
+                 current_user: models.User = Depends(oauth2.get_current_user)):
+    
+    redis = aioredis.from_url(REDIS_URL, encoding="utf-8", decode_responses=True)
+    
+    # 1. Mevcut Access Token'ı Kara Listeye Al (Süresi dolana kadar)
+    await redis.set(f"blacklist:{token}", "true", ex=settings.access_token_expire_minutes * 60) 
+    
+    # 2. Redis'teki Refresh Token'ı Sil (Artık yeni access token alamasın)
+    await redis.delete(f"refresh_token:{current_user.id}")
+    
+    await redis.close()
+    
+    return {"message": "Başarıyla çıkış yapıldı. Oturum tamamen sonlandırıldı."}
+
+
+
+
+# --- REFRESH TOKEN İLE YENİ TOKEN ALMA ---
+@router.post('/refresh', response_model=schemas.Token)
+async def refresh_token(refresh_token: str, db: Session = Depends(database.get_db)):
+    
+    redis = aioredis.from_url(REDIS_URL, encoding="utf-8", decode_responses=True)
+    
+    try:
+        # 1. Gelen Refresh Token'ın imzasını kontrol et
+        payload = jwt.decode(refresh_token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("user_id")
+        
+        if user_id is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Geçersiz Refresh Token")
+            
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh Token süresi dolmuş veya hatalı")
+
+    # 2. Redis'te bu kullanıcıya ait kayıtlı token duruyor mu?
+    # Hatırla: Logout olunca bunu siliyorduk.
+    stored_token = await redis.get(f"refresh_token:{user_id}")
+
+    # 3. Gelen token ile Redis'teki token eşleşiyor mu?
+    # Bu adım çalınmış token'ların tekrar kullanılmasını engeller (Reuse Detection)
+    if not stored_token or stored_token != refresh_token:
+        # Eğer eşleşmiyorsa bu şüpheli bir durumdur, her ihtimale karşı Redis'teki kaydı sil
+        await redis.delete(f"refresh_token:{user_id}")
+        await redis.close()
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Oturum geçersiz, lütfen tekrar giriş yapın.")
+
+    # 4. HER ŞEY OK! Yeni bir ikili (Access + Refresh) üret (ROTATION)
+    new_access_token = oauth2.create_access_token(data={"user_id": user_id})
+    new_refresh_token = oauth2.create_refresh_token(data={"user_id": user_id})
+
+    # 5. Yeni Refresh Token'ı Redis'e yaz (Eskisinin üzerine yazar)
+    await redis.set(
+        f"refresh_token:{user_id}", 
+        new_refresh_token, 
+        ex=settings.refresh_token_expire_days * 24 * 60 * 60
+    )
+    await redis.close()
+
+    return {
+        "access_token": new_access_token, 
+        "refresh_token": new_refresh_token, 
+        "token_type": "bearer"
+    }
+
+==================================================
+DOSYA: .\app\routers\post.py
+==================================================
+
+from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
+from sqlalchemy.orm import Session
+from typing import List, Optional
+from sqlalchemy import func
+
+# --- DÜZELTİLMİŞ KISIMLAR ---
+from .. import models, schemas, oauth2
+from ..database import get_db
+# -----------------------------
+
+# Router Tanımlaması
+router = APIRouter(
+    prefix="/posts",
+    tags=['Posts']
+)
+
+# 1. GET ALL (Aynı kaldı)
+@router.get("/", response_model=List[schemas.PostOut])
+def get_posts(db: Session = Depends(get_db),
+              current_user: int = Depends(oauth2.get_current_user),
+              limit: int = 10,
+              skip: int = 0,
+              search: Optional[str] = ""):
+    
+    # Vote (Beğeni) sayılarını da getiren Join sorgusu
+    posts = db.query(models.Post, func.count(models.Vote.post_id).label("votes"))\
+        .join(models.Vote, models.Vote.post_id == models.Post.id, isouter=True)\
+        .group_by(models.Post.id)\
+        .filter(models.Post.title.contains(search))\
+        .limit(limit)\
+        .offset(skip)\
+        .all()
+        
+    return posts
+
+# 2. CREATE (Aynı kaldı)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.Post)
+def create_posts(post: schemas.PostCreate,
+                 db: Session = Depends(get_db),
+                 current_user: int = Depends(oauth2.get_current_user)):
+    print(current_user.email)
+    new_post = models.Post(owner_id=current_user.id, **post.dict())
+    db.add(new_post)
+    db.commit()
+    db.refresh(new_post)
+    return new_post
+
+# 3. GET ONE (TEK POST ÇEKME ROTASI - JOIN SORGUSUYLA GÜNCELLENDİ)
+@router.get("/{id}", response_model=schemas.PostOut) # PostOut şeması bekleniyor
+def get_post(id: int, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+    
+    # JOIN SORGUSU EKLENDİ: Artık Vote sayısını da çekiyor.
+    post = db.query(models.Post, func.count(models.Vote.post_id).label("votes"))\
+        .join(models.Vote, models.Vote.post_id == models.Post.id, isouter=True)\
+        .group_by(models.Post.id)\
+        .filter(models.Post.id == id).first()
+    
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"post with id: {id} was not found")
+    
+    # PostOut şemasına uyması için JOIN sonucu dönülmeli (Post objesi + votes sayısı)
+    return post 
+
+# 4. DELETE (Aynı kaldı)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_post(id: int, current_user: int = Depends(oauth2.get_current_user), db: Session = Depends(get_db)):
+    # 1. Silinecek postu bul
+    post_query = db.query(models.Post).filter(models.Post.id == id)
+    post = post_query.first()
+    # 2. Post yoksa 404 ver
+    if post == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"post with id: {id} does not exist")
+    # 3. Postun sahibi değilse silmesine izin verme (403)
+    if post.owner_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="Not authorized to perform requested action")
+
+    post_query.delete(synchronize_session=False)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+# 5. UPDATE (Aynı kaldı)
+@router.put("/{id}", response_model=schemas.Post)
+def update_post(id: int, updated_post: schemas.PostCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+    post_query = db.query(models.Post).filter(models.Post.id == id)
+    post = post_query.first()
+    
+    if post == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"post with id: {id} does not exist")
+    
+    if post.owner_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="Not authorized to perform requested action")
+    
+    post_query.update(updated_post.dict(), synchronize_session=False)
+    db.commit()
+    return post_query.first()
+
+==================================================
+DOSYA: .\app\routers\user.py
+==================================================
+
+from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
+from sqlalchemy.orm import Session
+from typing import List
+
+# --- DÜZELTİLEN KISIMLAR (Relative Imports) ---
+# app.schemas, app.utils yerine ..schemas, ..utils kullanıyoruz
+from .. import models, schemas, utils
+from ..database import get_db
+from .. import oauth2  # Login kontrolü için
+# ----------------------------------------------
+
+router = APIRouter(
+    prefix="/users",
+    tags=['Users']
+)
+
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.UserOut)
+def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    # Hash işlemi
+    hashed_password = utils.hash(user.password)
+    user.password = hashed_password
+    
+    new_user = models.User(**user.dict())
+    try:
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+    except Exception as e:
+        # Aynı email hatası için basit önlem (Daha detaylısı ileride)
+        print(e) # Hatayı terminalde görmek için
+        raise HTTPException(status_code=400, detail="Error creating user (Email already exists?)")
+    return new_user
+
+@router.get("/{id}", response_model=schemas.UserOut)
+def get_user(id: int, db: Session = Depends(get_db)):
+    user = db.query(models.User).filter(models.User.id == id).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"User with id: {id} does not exist")
+    return user
+
+# 1. GET ALL
+@router.get("/", response_model=List[schemas.UserOut])
+def get_users(db: Session = Depends(get_db)):
+    users = db.query(models.User).all()
+    return users
+
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(id: int, 
+                db: Session = Depends(get_db), 
+                current_user: int = Depends(oauth2.get_current_user)):
+    
+    if current_user.role != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="Buna yetkiniz yok")
+
+    delete_query = db.query(models.User).filter(models.User.id == id)
+    if delete_query.first() == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail = f"user with {id} does not exist")
+    delete_query.delete(synchronize_session=False)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.put("/{id}", status_code=status.HTTP_200_OK)
+def update_user(id: int,
+                updated_user: schemas.UserUpdate,
+                db: Session = Depends(get_db),
+                current_user: int = Depends(oauth2.get_current_user)):
+    update_query = db.query(models.User).filter(models.User.id == id)
+    user = update_query.first()
+    if user.id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="Buna yetkiniz yok")
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"user with {id} does not exist")
+    if updated_user.password:
+        hashed_password = utils.hash(updated_user.password)
+        updated_user.password = hashed_password
+
+    update_query.update(updated_user.dict(exclude_unset=True), synchronize_session=False)
+
+    db.commit()
+
+    return update_query.first() # Güncel halini döndür
+
+==================================================
+DOSYA: .\app\routers\vote.py
+==================================================
+
+from fastapi import FastAPI, Response, status, HTTPException, Depends, APIRouter
+from sqlalchemy.orm import Session
+
+# --- DÜZELTİLEN KISIM (Relative Imports) ---
+# app.schemas, models vb. yerine ..schemas, ..models kullanıyoruz
+from .. import schemas, database, models, oauth2
+# ----------------------------------------------
+
+router = APIRouter(
+    prefix="/vote",
+    tags=['Vote']
+)
+
+@router.post("/", status_code=status.HTTP_201_CREATED)
+def vote(vote: schemas.Vote, db: Session = Depends(database.get_db), current_user: int = Depends(oauth2.get_current_user)):
+
+    # 1. Önce böyle bir Post var mı diye kontrol et
+    # (Olmayan bir postu beğenemezsin)
+    post = db.query(models.Post).filter(models.Post.id == vote.post_id).first()
+    if not post:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Post with id: {vote.post_id} does not exist")
+
+    # 2. Bu kullanıcı bu post için daha önce oy kullanmış mı?
+    vote_query = db.query(models.Vote).filter(
+        models.Vote.post_id == vote.post_id, 
+        models.Vote.user_id == current_user.id
+    )
+    found_vote = vote_query.first()
+
+    # --- SENARYO A: BEĞENMEK İSTİYOR (dir = 1) ---
+    if (vote.dir == 1):
+        if found_vote:
+            # Zaten beğenmişse hata ver
+            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"User {current_user.id} has already voted on post {vote.post_id}")
+        
+        # Beğenmemişse yeni oy oluştur
+        new_vote = models.Vote(post_id=vote.post_id, user_id=current_user.id)
+        db.add(new_vote)
+        db.commit()
+        return {"message": "successfully added vote"}
+
+    # --- SENARYO B: BEĞENİYİ GERİ ALMAK İSTİYOR (dir = 0) ---
+    else:
+        if not found_vote:
+            # Zaten beğenmemiş ki, neyi geri alacak?
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Vote does not exist")
+        
+        # Beğenmişse oyu sil
+        vote_query.delete(synchronize_session=False)
+        db.commit()
+        return {"message": "successfully deleted vote"}
+
+==================================================
+DOSYA: .\app\routers\__init__.py
+==================================================
+
+
+
+==================================================
+DOSYA: .\tests\conftest.py
+==================================================
+
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from app.main import app
+from app.config import settings
+from app.database import get_db, Base
+from app.oauth2 import create_access_token
+from app import models
+import pytest
+
+# --- ÖNEMLİ: Auth dosyasındaki o değişkeni buraya çağırıyoruz ---
+from app.routers.auth import login_limiter
+# ---------------------------------------------------------------
+
+# 1. VERİTABANI BAĞLANTISI
+SQLALCHEMY_DATABASE_URL = f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test"
+
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+# 2. SESSION FIXTURE
+@pytest.fixture()
+def session():
+    print("Test veritabanı tabloları oluşturuluyor...")
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    db = TestingSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# 3. STANDART CLIENT (Tertemiz Override Yöntemi)
+@pytest.fixture()
+def client(session):
+    # İŞTE ÇÖZÜM BURADA:
+    # "login_limiter" gördüğün yere "boş fonksiyon" koy diyoruz.
+    # Böylece kod Redis'e hiç gitmiyor, hata verme şansı kalmıyor.
+    app.dependency_overrides[login_limiter] = lambda: None
+
+    def override_get_db():
+        try:
+            yield session
+        finally:
+            pass
+
+    app.dependency_overrides[get_db] = override_get_db
+    
+    yield TestClient(app)
+    
+    # Temizlik
+    app.dependency_overrides.clear()
+
+# 4. TEST USER
+@pytest.fixture
+def test_user(client):
+    user_data = {"email": "testuser@gmail.com", "password": "password123"}
+    res = client.post("/users/", json=user_data)
+    assert res.status_code == 201
+    new_user = res.json()
+    new_user['password'] = user_data['password']
+    return new_user
+
+# 5. TOKEN
+@pytest.fixture
+def token(test_user):
+    return create_access_token({"user_id": test_user['id']})
+
+# 6. AUTHORIZED CLIENT
+@pytest.fixture
+def authorized_client(client, token):
+    client.headers = {
+        **client.headers,
+        "Authorization": f"Bearer {token}"
+    }
+    return client
+
+# 7. TEST POSTS
+@pytest.fixture
+def test_posts(test_user, session):
+    posts_data = [{
+        "title": "1. Post Başlığı",
+        "content": "1. İçerik",
+        "owner_id": test_user['id']
+    }, {
+        "title": "2. Post Başlığı",
+        "content": "2. İçerik",
+        "owner_id": test_user['id']
+    }, {
+        "title": "3. Post Başlığı",
+        "content": "3. İçerik",
+        "owner_id": test_user['id']
+    }]
+    
+    def create_post_model(post):
+        return models.Post(**post)
+    
+    post_map = map(create_post_model, posts_data)
+    posts = list(post_map)
+    
+    session.add_all(posts)
+    session.commit()
+    
+    posts = session.query(models.Post).all()
+    return posts
+
+@pytest.fixture
+def test_vote(test_posts, session, test_user):
+    new_vote = models.Vote(post_id=test_posts[0].id, user_id=test_user['id'])
+    session.add(new_vote)
+    session.commit()
+
+==================================================
+DOSYA: .\tests\test_bfla.py
+==================================================
+
+import pytest
+from app import models
+
+def test_delete_user_as_admin_success(authorized_client, test_user, session):
+    """
+    1. SENARYO: Admin yetkisi olan biri kullanıcı silebilir mi? (BFLA CHECK)
+    """
+    # 1. Şu anki kullanıcımızı (authorized_client) veritabanında 'admin' yapalım.
+    # Normalde veritabanında 'user' olarak kayıtlı.
+    user = session.query(models.User).filter(models.User.id == test_user['id']).first()
+    user.role = "admin"
+    session.commit()
+    
+    # 2. Silinecek Rastgele Bir Kullanıcı Oluştur (Kurban)
+    res = authorized_client.post("/users/", json={"email": "silinecek@gmail.com", "password": "123"})
+    kurban_id = res.json()['id']
+    
+    # 3. Admin yetkisiyle silme isteği at
+    res = authorized_client.delete(f"/users/{kurban_id}")
+    
+    # Beklenen: 204 No Content (Başarılı)
+    assert res.status_code == 204
+
+def test_delete_user_as_normal_user_fail(client, test_user, session):
+    """
+    2. SENARYO: Normal bir kullanıcı (Hacker), admin endpointini denerse?
+    """
+    # 1. Normal bir kullanıcı oluştur ve giriş yap
+    res = client.post("/users/", json={"email": "normal@gmail.com", "password": "123"})
+    normal_user = res.json()
+    
+    login_res = client.post("/login", data={"username": "normal@gmail.com", "password": "123"})
+    token = login_res.json()['access_token']
+    
+    client.headers = {**client.headers, "Authorization": f"Bearer {token}"}
+    
+    # 2. Admin olmadığı halde silme isteği atıyor!
+    # Kimi sildiğinin önemi yok, sistemin reddetmesi lazım.
+    res = client.delete(f"/users/{test_user['id']}")
+    
+    # Beklenen: 403 Forbidden (YASAK!)
+    assert res.status_code == 403
+
+==================================================
+DOSYA: .\tests\test_bola.py
+==================================================
+
+import pytest
+from app import models
+
+def test_delete_other_user_post(client, test_user, test_posts):
+    """
+    BOLA TESTİ:
+    Senaryo: Hacker kullanıcısı, test_user'a ait bir postu silmeye çalışıyor.
+    Beklenen: 403 Forbidden
+    """
+    
+    # 1. Hacker Kullanıcısını Oluştur
+    res = client.post("/users/", json={"email": "hacker@gmail.com", "password": "password123"})
+    assert res.status_code == 201
+    
+    # 2. Hacker Olarak Giriş Yap (Token Al)
+    res_login = client.post("/login", data={"username": "hacker@gmail.com", "password": "password123"})
+    token = res_login.json()['access_token']
+    
+    # 3. Hacker'ın Yetkili İstemcisini Hazırla
+    # Standart client'ın header'ını hacker'ın token'ı ile güncelliyoruz
+    client.headers = {
+        **client.headers,
+        "Authorization": f"Bearer {token}"
+    }
+    
+    # 4. Hedef: test_user'a ait olan ilk post (Fixture'dan geliyor)
+    target_post_id = test_posts[0].id
+    
+    # 5. SALDIRI ANI: DELETE isteği at
+    res = client.delete(f"/posts/{target_post_id}")
+    
+    # 6. SONUÇ KONTROLÜ
+    # Eğer kodun güvenliyse 403 dönmeli.
+    # Eğer BOLA açığın varsa 204 döner ve bu assertion hata verir.
+    assert res.status_code == 403
+
+==================================================
+DOSYA: .\tests\test_calculations.py
+==================================================
+
+# tests/test_calculations.py
+from app.calculations import add
+
+def test_add():
+    print("Toplama fonksiyonu test ediliyor...")
+    sum = add(5, 3)
+    assert sum == 8  # 5 + 3'ün 8 olmasını bekliyoruz [cite: 1574]
+
+==================================================
+DOSYA: .\tests\test_data_exposure.py
+==================================================
+
+import pytest
+from app import schemas
+
+def test_no_password_in_response(client, test_user):
+    
+    res = client.get(f"/users/{test_user['id']}")
+    assert res.status_code == 200
+
+    data = res.json()
+    assert "password" not in data, "guvenlik acigi: password alani donuyor"
+
+def test_correct_response_model(client, test_user):
+    res = client.get(f"/users/{test_user['id']}")
+
+    try:
+        schemas.UserOut(**res.json())
+    except Exception as e:
+        pytest.fail(f"Response modeli UserOut'a uymuyor: {e}")
+
+
+    
+
+==================================================
+DOSYA: .\tests\test_logout.py
+==================================================
+
+import pytest
+from app import schemas
+
+def test_logout_invalidates_token(client, test_user):
+    res_login = client.post("/login", data={"username": test_user['email'], "password": test_user['password']})
+    token = res_login.json().get("access_token")
+    headers = {"Authorization": f"Bearer {token}"}
+    
+    res = client.get("/posts/", headers=headers)
+    assert res.status_code == 200
+
+    res_logout = client.post("/logout", headers=headers)
+    assert res_logout.status_code == 200
+
+    res_after_logout = client.get("/posts/", headers=headers)
+    assert res_after_logout.status_code == 401
+    
+
+==================================================
+DOSYA: .\tests\test_main.py
+==================================================
+
+# tests/test_main.py
+
+def test_root(client):
+    res = client.get("/")
+    # Ana sayfanda ne yazıyorsa onu kontrol et.
+    # Eğer {"message": "Hello World"} dönüyorsa:
+    print(res.json()) # Hatayı görmek için
+    assert res.status_code == 200
+    # assert res.json().get('message') == 'Hello World' (Mesajın neyse ona göre düzelt)
+
+==================================================
+DOSYA: .\tests\test_mass_assignment.py
+==================================================
+
+import pytest
+from app import models
+
+def test_user_cannot_update_role_via_profile_update(authorized_client, test_user, session):
+    payload = {
+        "email": "hacker@mail.com",
+        "password": "123456789",
+        "role": "admin"  # Kötü niyetli kullanıcı rolünü değiştirmeye çalışıyor
+    }
+    res = authorized_client.put(f"/users/{test_user['id']}", json=payload)
+
+    updated_user = session.query(models.User).filter(models.User.id == test_user['id']).first()
+    
+    assert updated_user.role == "user"
+
+    
+
+
+==================================================
+DOSYA: .\tests\test_post.py
+==================================================
+
+from app import schemas
+import pytest
+
+# 1. TÜM POSTLARI ÇEKME TESTİ
+def test_get_all_posts(authorized_client, test_posts):
+    res = authorized_client.get("/posts/")
+    
+    # Doğrulama: Gelen veri bir liste mi? Uzunluğu bizim eklediğimiz kadar mı?
+    # test_posts fixture'ı 3 tane post eklemişti.
+    assert len(res.json()) == len(test_posts)
+    assert res.status_code == 200
+
+# 2. TEK POST ÇEKME TESTİ
+def test_get_one_post(authorized_client, test_posts):
+    res = authorized_client.get(f"/posts/{test_posts[0].id}")
+    post = schemas.PostOut(**res.json())
+    
+    assert post.Post.id == test_posts[0].id
+    assert post.Post.content == test_posts[0].content
+
+# 3. YENİ POST OLUŞTURMA TESTİ
+@pytest.mark.parametrize("title, content, published", [
+    ("Yeni Başlık 1", "Yeni İçerik 1", True),
+    ("Pizzayı Severim", "Pepperoni olsun", False),
+    ("En sevdiğim renk", "Mavi", True),
+])
+def test_create_post(authorized_client, test_user, title, content, published):
+    res = authorized_client.post("/posts/", json={"title": title, "content": content, "published": published})
+    
+    created_post = schemas.Post(**res.json())
+    
+    assert res.status_code == 201
+    assert created_post.title == title
+    assert created_post.owner_id == test_user['id']
+
+# 4. GİRİŞ YAPMADAN POST SİLME (UNAUTHORIZED)
+def test_delete_post_unauthorized(client, test_user, test_posts):
+    res = client.delete(f"/posts/{test_posts[0].id}")
+    assert res.status_code == 401
+
+# 5. BAŞARILI SİLME İŞLEMİ
+def test_delete_post_success(authorized_client, test_user, test_posts):
+    res = authorized_client.delete(f"/posts/{test_posts[0].id}")
+    assert res.status_code == 204
+
+==================================================
+DOSYA: .\tests\test_security_headers.py
+==================================================
+
+import pytest
+
+def test_security_headers_present(client):
+
+    res = client.get("/")
+    assert res.status_code == 200
+    res_headers = res.headers
+    assert res_headers.get("X-Content-Type-Options") == "nosniff", "X-Content-Type-Options header eksik veya yanlış"
+    assert res_headers.get("X-Frame-Options") == "DENY", "X-Frame-Options header eksik veya yanlış"
+    
+
+
+==================================================
+DOSYA: .\tests\test_sql_injection.py
+==================================================
+
+import pytest
+
+def test_login_sql_injection_attempt(client):
+    malicious_email = "admin@gmail.com ' OR '1'='1"
+
+    payload = {
+        "username": malicious_email,
+        "password": "randompassword" #hacker bu sifreyi salliyor dogrulugu onemli degil
+    }
+
+    res = client.post("/login", data=payload)
+
+    assert res.status_code == 403
+    assert "Invalid Credentials" in res.json().get("detail", "")
+
+
+
+==================================================
+DOSYA: .\tests\test_users.py
+==================================================
+
+from app import schemas
+from app.config import settings
+from jose import jwt
+import pytest
+
+# 1. KULLANICI OLUŞTURMA TESTİ
+def test_create_user(client):
+    email = "testdeneme@gmail.com" # nosec B105
+    password = "password123" # nosec B105
+    
+    res = client.post("/users/", json={"email": email, "password": password})
+    
+    # Oluşturulan kullanıcıyı şemaya göre doğrula
+    new_user = schemas.UserOut(**res.json())
+    
+    assert res.status_code == 201
+    assert new_user.email == email
+
+
+# 2. GİRİŞ YAPMA (LOGIN) TESTİ
+def test_login_user(client):
+    # Önce bir kullanıcı oluşturuyoruz (client fixture'ı temiz DB verdiği için)
+    email = "giris@gmail.com" # nosec B105
+    password = "123" # nosec B105
+    client.post("/users/", json={"email": email, "password": password})
+    
+    # Şimdi giriş yapmayı deniyoruz (Form Data olarak gider)
+    res = client.post("/login", data={"username": email, "password": password})
+    
+    # Token şemasına uyuyor mu?
+    login_res = schemas.Token(**res.json())
+    
+    # Token'ı decode edip içindeki ID'yi kontrol edelim
+    payload = jwt.decode(login_res.access_token, settings.secret_key, algorithms=[settings.algorithm])
+    id = payload.get("user_id")
+    
+    assert id is not None
+    assert login_res.token_type == "bearer" # nosec B105
+    assert res.status_code == 200
+
+# 3. HATALI GİRİŞ TESTLERİ (PARAMETRİZE)
+# Tek fonksiyonda 3 farklı senaryoyu deniyoruz
+@pytest.mark.parametrize("email, password, status_code", [
+    ('yanlisemail@gmail.com', '123', 403),   # Yanlış Email
+    ('giris@gmail.com', 'yanlissifre', 403), # Yanlış Şifre
+    ('yanlisemail@gmail.com', 'yanlissifre', 403), # İkisi de yanlış
+    (None, '123', 422), # Email yok (Validation hatası)
+    ('giris@gmail.com', None, 422) # Şifre yok (Validation hatası)
+])
+def test_incorrect_login(client, email, password, status_code):
+    # Doğru kullanıcıyı oluştur
+    client.post("/users/", json={"email": "giris@gmail.com", "password": "123"})
+    
+    # Yanlış verilerle giriş dene
+    res = client.post("/login", data={"username": email, "password": password})
+    
+    assert res.status_code == status_code
+
+==================================================
+DOSYA: .\tests\test_vote.py
+==================================================
+
+import pytest
+from app import models
+
+# 1. BAŞARILI OY VERME (LIKE)
+def test_vote_on_post(authorized_client, test_posts):
+    res =authorized_client.post(
+        "/vote/", json={"post_id": test_posts[0].id, "dir":1}
+    )
+    assert res.status_code == 201
+
+# 2. AYNI POSTA İKİ KEZ OY VERME (CONFLICT)
+# test_vote fixture'ı sayesinde bu post zaten beğenilmiş durumda.
+def test_vote_twice_post(authorized_client, test_posts, test_vote):
+    res = authorized_client.post(
+        "/vote/", json={"post_id": test_posts[0].id, "dir": 1})
+    assert res.status_code == 409
+
+# 3. OYU GERİ ÇEKME (UNLIKE)
+# test_vote fixture'ı sayesinde zaten beğenilmiş, şimdi siliyoruz.
+def test_delete_vote(authorized_client, test_posts, test_vote):
+    res = authorized_client.post(
+        "/vote/", json={"post_id": test_posts[0].id, "dir": 0})
+    assert res.status_code == 201
+
+# 4. OLMAYAN OYU SİLMEYE ÇALIŞMA (404)
+# Kimse oy vermedi ama silmeye çalışıyoruz (dir=0)
+def test_delete_vote_non_exist(authorized_client, test_posts):
+    res = authorized_client.post(
+        "/vote/", json={"post_id": test_posts[0].id, "dir": 0})
+    assert res.status_code == 404
+
+# 5. OLMAYAN POSTA OY VERME (404)
+def test_vote_post_non_exist(authorized_client, test_posts):
+    res = authorized_client.post(
+        "/vote/", json={"post_id": 88888, "dir": 1})
+    assert res.status_code == 404
+
+# 6. GİRİŞ YAPMADAN OY VERME (UNAUTHORIZED)
+def test_vote_unauthorized(client, test_posts):
+    res = client.post(
+        "/vote/", json={"post_id": test_posts[0].id, "dir": 1})
+    assert res.status_code == 401
+
+
+==================================================
+DOSYA: .\tests\__init__.py
+==================================================
+
+

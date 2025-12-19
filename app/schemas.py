@@ -40,6 +40,7 @@ class UserLogin(BaseModel):
 #Token Semasi
 class Token(BaseModel):
     access_token: str
+    refresh_token: str  # <--- Bunu yeni ekledik
     token_type: str
 
 class TokenData(BaseModel):

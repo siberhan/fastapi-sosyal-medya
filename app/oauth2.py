@@ -7,6 +7,7 @@ from .config import settings
 from . import schemas, database, models
 import os
 from redis import asyncio as aioredis # <--- Redis için eklendi
+import uuid
 
 # Login URL'si
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
@@ -14,7 +15,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 SECRET_KEY = settings.secret_key
 ALGORITHM = settings.algorithm
 ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
-
+REFRESH_TOKEN_EXPIRE_DAYS = settings.refresh_token_expire_days
 # Redis bağlantı adresi
 REDIS_URL = f"redis://{os.environ.get('REDIS_HOSTNAME', 'localhost')}"
 
@@ -22,6 +23,21 @@ def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+# --- YENİ: Refresh Token üreten fonksiyon ---
+def create_refresh_token(data: dict):
+    to_encode = data.copy()
+    
+    # Her refresh token'a benzersiz bir "jti" (JWT ID) veriyoruz
+    # Bu, ileride Redis'te kontrol yaparken çok işimize yarayacak
+    to_encode.update({"jti": str(uuid.uuid4())})
+    
+    # Süresini gün bazında ayarlıyoruz (örn: 7 gün)
+    expire = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
+    to_encode.update({"exp": expire})
+    
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
