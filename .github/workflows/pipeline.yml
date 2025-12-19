@@ -9,7 +9,8 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     env:
-      DATABASE_HOSTNAME: localhost
+      # BURASI KRİTİK: Localhost yerine servis adlarını yazıyoruz
+      DATABASE_HOSTNAME: postgres
       DATABASE_PORT: 5432
       DATABASE_PASSWORD: 3012
       DATABASE_NAME: fastapi
@@ -17,9 +18,7 @@ jobs:
       SECRET_KEY: "ben_kediler_kopekleri_bir_de_tavuklari_cok_severim"
       ALGORITHM: "HS256"
       ACCESS_TOKEN_EXPIRE_MINUTES: 30
-      # --- YENİ: Redis Hostname Tanımı ---
-      REDIS_HOSTNAME: redis 
-      # ----------------------------------
+      REDIS_HOSTNAME: redis
     services:
       postgres:
         image: postgres
@@ -33,8 +32,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      
-      # --- YENİ: Redis Servisi ---
       redis:
         image: redis
         ports:
@@ -44,7 +41,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      # ---------------------------
 
     steps:
       - name: Kodları Çek
@@ -58,68 +54,53 @@ jobs:
           pip install -r requirements.txt
       - name: Test Veritabanı Oluştur ve Testleri Çalıştır
         run: |
-          python -c "import psycopg2; conn = psycopg2.connect(user='postgres', password='3012', host='localhost', port='5432'); conn.set_isolation_level(0); cur = conn.cursor(); cur.execute('CREATE DATABASE fastapi_test'); cur.close(); conn.close()"
+          # host='localhost' olan yerleri host='postgres' yaptık ki GitHub bulabilsin
+          python -c "import psycopg2; conn = psycopg2.connect(user='postgres', password='3012', host='postgres', port='5432'); conn.set_isolation_level(0); cur = conn.cursor(); cur.execute('CREATE DATABASE fastapi_test'); cur.close(); conn.close()"
           pytest -v -s
 
-  # --- GÖREV 2: KOD GÜVENLİK TARAMASI (Bandit SAST) ---
+  # --- DİĞER GÖREVLER (Bandit, Trivy, Build) ---
+  # Dosyanın geri kalanını (bandit-scan, trivy-scan, build-and-push, deploy) 
+  # olduğu gibi altına ekle, onlarda bir değişiklik yok.
   bandit-scan:
-    needs: tests  # Sadece testler geçtiyse başla
+    needs: tests
     runs-on: ubuntu-latest
     steps:
       - name: Kodları Çek (Checkout)
         uses: actions/checkout@v4
-
-      # Bandit'i kurmak için Python ortamını ayarlamamız gerekiyor
       - name: Python Kur
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-
-      # Bandit kütüphanesini ve gereksinimleri kur
       - name: Bağımlılıkları Yükle
         run: pip install bandit
+      - name: Bandit'i Çalıştır
+        run: bandit -r . -x tests/ --skip B404,B101 --exit-zero
 
-      # Bandit'i Çalıştır (Zafiyetleri Göster) - SON DÜZELTME
-      - name: Bandit'i Çalıştır (Zafiyetleri Göster)
-        run: |
-          # B101 uyarılarını es geç, Low/Medium/High riskleri göster ve 0 koduyla çık.
-          bandit -r . -x tests/ --skip B404,B101 --exit-zero
-        env:
-          PYTHONPATH: .
-
-
-  # --- GÖREV 3: KÜTÜPHANE ZAFİYET TARAMASI (Trivy) ---
   trivy-scan:
-    needs: bandit-scan # Sadece Bandit geçtiyse başla
+    needs: bandit-scan
     runs-on: ubuntu-latest
     steps:
-      - name: Kodları Çek (Checkout)
+      - name: Kodları Çek
         uses: actions/checkout@v4
-
-      - name: Bağımlılıkları Tara (requirements.txt)
+      - name: Bağımlılıkları Tara
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
-          severity: 'HIGH,CRITICAL' # Sadece Yüksek ve Kritik zafiyetleri kontrol et
+          severity: 'HIGH,CRITICAL'
           scan-ref: '.'
           format: 'table'
-          ignore-unfixed: true
 
-  # --- GÖREV 4: BUILD & PUSH (Docker Fabrikası) ---
   build-and-push:
-    # DİKKAT: Testler VE güvenlik taramaları başarılıysa başla!
     needs: [tests, bandit-scan, trivy-scan]
     runs-on: ubuntu-latest
     steps:
       - name: Kodları Çek
         uses: actions/checkout@v4
-
       - name: Docker Hub'a Giriş Yap
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Build ve Push
         uses: docker/build-push-action@v5
         with:
@@ -127,9 +108,8 @@ jobs:
           push: true
           tags: bedozsylr/fastapi-sosyal-medya:latest
 
-  # --- GÖREV 5: DEPLOY (Kurye) ---
   deploy:
-    needs: build-and-push # Paketleme bitmeden dağıtım başlamaz
+    needs: build-and-push
     runs-on: ubuntu-latest
     steps:
       - name: Sunucuya Bağlan ve Güncelle
@@ -138,8 +118,6 @@ jobs:
           host: ${{ secrets.PROD_HOST }}
           username: ${{ secrets.PROD_USERNAME }}
           key: ${{ secrets.PROD_SSH_KEY }}
-          timeout: 30s
-          command_timeout: 30m
           script: |
             cd ~/docker-app
             docker-compose pull
