@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from app.main import app
 from app.config import settings
 from app.database import get_db, Base
-from app.oauth2 import create_access_token
+from app.oauth2 import create_access_token, get_current_user
 from app import models
 import pytest
 
