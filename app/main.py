@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 # --- DÜZELTİLEN KISIMLAR (Relative Imports) ---
@@ -15,6 +15,17 @@ import os
 #models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+# --- 2. DEĞİŞİKLİK: GÜVENLİK ZIRHI (YENİ EKLENEN KISIM) ---
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    # Tarayıcıya: "Dosya türünü tahmin etmeye çalışma"
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    # Tarayıcıya: "Bu siteyi iframe içine alıp sahte buton koyamazsın"
+    response.headers["X-Frame-Options"] = "DENY"
+    return response
+# ----------------------------------------------------------
 
 @app.on_event("startup")
 async def startup():
